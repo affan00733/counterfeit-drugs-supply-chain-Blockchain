@@ -36,26 +36,34 @@ function searchAsset1() {
   });
 }
 
-function transferAsset() {
+async function transferAsset() {
 
-  hehe = AssetTrackerContract.methods.getidentityCount();
+  hehe = await AssetTrackerContract.methods.getidentityCount();
 
   console.log(hehe);
-  AssetTrackerContract.methods.getIdentity(1, account0)
+
+  let user_id = await document.getElementById("iduser").value;
+  console.log("user_id", user_id);
+
+
+  await AssetTrackerContract.methods.getIdentity(user_id, account0)
     .call((error, response) => {
       if (error) console.log(error);
       else {
         namer1 = response[1];
-        console.log(namer1);
+        console.log(response);
       }
     });
+    setTimeout(function(){ console.log("Hello"); }, 3000);
 
   let assetId = parseInt(document.getElementById("myInputer").value);
   let honor = document.getElementById("newOwner").value;
   let newOwner = document.getElementById("newOwner").value + '(' + document.getElementById("newStatus").value + ')';
   let newStatus = document.getElementById("newLocation").innerText;
   let newQuantity = document.getElementById("newQuantity").value;
-  AssetTrackerContract.methods.getAsset(assetId).call((error, response) => {
+  setTimeout(function(){ console.log("Hello"); }, 3000);
+
+  await AssetTrackerContract.methods.getAsset(assetId).call((error, response) => {
     if (error) console.log(error);
     else {
       if (response[1] !== "") {
@@ -63,22 +71,28 @@ function transferAsset() {
         let qrContent = document.getElementById("content").innerText;
         if (qrContent == stag) {
           // transfer the asset
+
           var reso = response[3].split("(");
           console.log(reso[0]);
           if (namer1 == reso[0]) {
             // if (checkers(honor)) {
-              
+
             // }
             // else {
             //   alert("Person Does Not Exist!");
             // }
+
+            setTimeout(function(){ console.log("Hello"); }, 3000);
+
+            
+
             AssetTrackerContract.methods
-                .transferAsset(assetId, newOwner, newStatus, newQuantity, response[3])
-                .send()
-                .then(tx => {
-                  console.log(tx);
-                  location.reload();
-                });
+              .transferAsset(assetId, newOwner, newStatus, newQuantity, response[3])
+              .send()
+              .then(tx => {
+                console.log(tx);
+                location.reload();
+              });
           }
           else {
             alert("You are not the owner!");
@@ -89,7 +103,8 @@ function transferAsset() {
           alert("Wrong QR Code!");
         }
       }
-    }
+    }setTimeout(function(){ console.log("Hello"); }, 3000);
+
   });
 }
 

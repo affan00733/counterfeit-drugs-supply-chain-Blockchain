@@ -54,13 +54,20 @@ function renderPageContent() {
 }
 
 function createNewAsset() {
-  AssetTrackerContract.methods.getIdentity(1, account0)
+  let userid = $('input[name="iduser"]').val();
+  console.log("userid", userid)
+  AssetTrackerContract.methods.getIdentity(userid, account0)
     .call((error, response) => {
-      if (error) console.log(error);
+      if (error) {
+         console.log(error)
+         alert("Invalid user ID")
+         return;
+       }
       else {
         namer = response[1];
       }
     });
+
   let batchNo = $('input[name="batchNo"]').val();
   let name = $('input[name="name"]').val();
   let desc = $('input[name="desc"]').val();
@@ -84,6 +91,7 @@ function createNewAsset() {
         // render the table again
         renderPageContent();
         // clear the form
+        $('input[name="iduser"]').val("");
         $('input[name="batchNo"]').val("");
         $('input[name="name"]').val("");
         $('input[name="desc"]').val("");
@@ -148,7 +156,7 @@ function signUp() {
     .then(result => {
       if (result.status === true) {
         alert("Success");
-        window.location = "./home.html";
+        // window.location = "./home.html";
       }
     });
 }
@@ -156,6 +164,7 @@ function signUp() {
 function login() {
   var id = $("#ider").val();
   var password = $('#passworder').val();
+
   console.log(id + password + account0);
   AssetTrackerContract.methods.getIdentity(id, account0)
     .call((error, response) => {
@@ -163,8 +172,8 @@ function login() {
       else {
         console.log(response[4]);
         if (response[4] == password) {
-            alert("Success");
-            window.location = "./home.html";
+          alert("Success");
+          window.location = "./home.html";
         }
 
       }
